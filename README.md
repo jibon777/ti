@@ -1,4 +1,4 @@
-Markdown# 🎫 Internal Ticketing System (Jira Clone)
+# 🎫 Internal Ticketing System (Jira Clone)
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-18.2-blue?logo=react" alt="React" />
@@ -58,7 +58,7 @@ ticketing-app/
         ├── main.jsx
         ├── App.jsx             # Komponen Utama Kanban & Modal
         └── index.css           # Directive CSS Tailwind
-👥 Akun Dummy (Kredensial Login)Gunakan akun berikut untuk menguji skenario komunikasi antara Developer dan QA:Nama UserEmailPasswordRoleBudi Developerbudi@example.compassword123DeveloperSiti QAsiti@example.compassword123QA⚡ Panduan Memulai (Quick Start)PrasyaratPastikan komputer Anda sudah terinstall:GitDocker DesktopLangkah Instalasi & JalankanClone RepositoriBashgit clone [https://github.com/username/ti.git](https://github.com/username/ti.git)
+👥 Akun Dummy (Kredensial Login)Gunakan akun berikut untuk menguji skenario komunikasi antara Developer dan QA:Nama UserEmailPasswordRoleBudi Developerbudi@example.compassword123DeveloperSiti QAsiti@example.compassword123QA⚡ Panduan Memulai (Quick Start)PrasyaratPastikan komputer Anda sudah terinstall:GitDocker DesktopLangkah Instalasi & JalankanClone RepositoriBashgit clone [https://github.com/jibon777/ti.git](https://github.com/jibon777/ti.git)
 cd ti
 Jalankan Aplikasi dengan DockerJalankan perintah berikut di folder root project:Bashdocker compose up --build
 Akses AplikasiBuka browser dan navigasi ke URL berikut:Frontend Web UI: http://localhost:5173Backend REST API: http://localhost:5000/api/ticketsDatabase Postgres: localhost:5432🔌 Dokumentasi REST APIMethodEndpointDeskripsiPOST/api/auth/loginOtentikasi email & password userGET/api/usersMengambil daftar seluruh anggota timGET/api/ticketsMengambil seluruh tiket beserta activity log & komentarPOST/api/ticketsMembuat tiket baruPUT/api/tickets/:id/statusMemperbarui status tiket (To Do / In Progress / Done)POST/api/tickets/:id/commentsMenambahkan komentar/catatan baru pada tiketPOST/api/uploadMenangani unggahan file gambar dari drag & drop🧹 Reset & Rebuild ContainerJika Anda mengubah struktur schema pada file database/init.sql atau menambah paket dependency baru:Bash# Matikan container dan hapus volume database lama

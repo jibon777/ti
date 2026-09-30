@@ -22,7 +22,7 @@ function App() {
     const email = e.target.email.value;
     const password = e.target.password.value;
     
-    const res = await fetch('http://localhost:5000/api/auth/login', {
+    const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -33,19 +33,19 @@ function App() {
   };
 
   const fetchData = () => {
-    fetch('http://localhost:5000/api/tickets').then(res => res.json()).then(data => {
+    fetch('/api/tickets').then(res => res.json()).then(data => {
       setTickets(data);
       if (selectedTicket) {
         const updated = data.find(t => t.id === selectedTicket.id);
         if (updated) setSelectedTicket(updated);
       }
     });
-    fetch('http://localhost:5000/api/users').then(res => res.json()).then(setUsersDb);
+    fetch('/api/users').then(res => res.json()).then(setUsersDb);
   };
 
   const handleCreateTicket = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:5000/api/tickets', {
+    await fetch('/api/tickets', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...newTicket, status: 'To Do' })
@@ -59,7 +59,7 @@ function App() {
     e.preventDefault();
     if (!commentText.trim()) return;
 
-    const res = await fetch(`http://localhost:5000/api/tickets/${selectedTicket.id}/comments`, {
+    const res = await fetch(`/api/tickets/${selectedTicket.id}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_name: user.name, text: commentText })
@@ -68,7 +68,7 @@ function App() {
     const data = await res.json();
     if (data.success) {
       setCommentText('');
-      fetchData(); // Refresh tiket & detail modal secara langsung
+      fetchData();
     } else {
       alert(data.error || 'Gagal menambahkan komentar');
     }
@@ -91,7 +91,7 @@ function App() {
         const loadingText = "\n[Mengupload gambar...]\n";
         setNewTicket(prev => ({ ...prev, description: prev.description + loadingText }));
 
-        const res = await fetch('http://localhost:5000/api/upload', {
+        const res = await fetch('/api/upload', {
             method: 'POST',
             body: formData
         });
@@ -120,7 +120,7 @@ function App() {
   const onDropTicket = async (e, newStatus) => {
     const ticketId = e.dataTransfer.getData('ticketId');
     if (!ticketId) return;
-    const res = await fetch(`http://localhost:5000/api/tickets/${ticketId}/status`, {
+    const res = await fetch(`/api/tickets/${ticketId}/status`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus, user_name: user.name })
@@ -132,7 +132,7 @@ function App() {
 
   const renderTextWithImages = (text) => {
     if (!text) return null;
-    const urlRegex = /(https?:\/\/[^\s]+(?:\.jpg|\.jpeg|\.png|\.gif|\.webp|\/uploads\/[^\s]+))/gi;
+    const urlRegex = /(https?:\/\/[^\s]+(?:\.jpg|\.jpeg|\.png|\.gif|\.webp)|(?:\/uploads\/[^\s]+))/gi;
     const parts = text.split(urlRegex);
     
     return parts.map((part, index) => {
@@ -223,7 +223,6 @@ function App() {
             </div>
             
             <div className="p-6 overflow-y-auto flex-grow flex flex-col md:flex-row gap-6">
-                {/* KIRI: DESKRIPSI & KOMENTAR/DISKUSI 2 SISI */}
                 <div className="flex-grow w-full md:w-2/3 flex flex-col gap-6">
                     <div>
                         <h3 className="text-lg font-semibold mb-2">Deskripsi / Detail</h3>
@@ -232,11 +231,8 @@ function App() {
                         </div>
                     </div>
 
-                    {/* KOMENTAR / DISKUSI */}
                     <div className="border-t pt-4">
                         <h3 className="text-lg font-semibold mb-3">💬 Diskusi & Catatan Penerima</h3>
-                        
-                        {/* List Komentar */}
                         <div className="space-y-3 mb-4 max-h-[220px] overflow-y-auto pr-2">
                             {(() => {
                                 let comments = [];
@@ -258,7 +254,6 @@ function App() {
                             })()}
                         </div>
 
-                        {/* Form Kirim Komentar */}
                         <form onSubmit={handleAddComment} className="flex gap-2">
                             <input 
                                 type="text" 
@@ -274,7 +269,6 @@ function App() {
                     </div>
                 </div>
                 
-                {/* KANAN: ASSIGNEE & ACTIVITY LOG */}
                 <div className="w-full md:w-1/3 flex flex-col gap-4 border-l pl-4">
                     <div className="bg-blue-50 p-4 rounded border border-blue-100">
                         <p className="text-sm text-gray-600 mb-1">Assignee:</p>

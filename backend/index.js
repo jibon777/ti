@@ -27,9 +27,10 @@ const pool = new Pool({
   port: 5432,
 });
 
+// UPLOAD GAMBAR (MENGGUNAKAN PATH RELATIF)
 app.post('/api/upload', upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Tidak ada gambar yang diupload' });
-  res.json({ imageUrl: `http://localhost:5000/uploads/${req.file.filename}` });
+  res.json({ imageUrl: `/uploads/${req.file.filename}` });
 });
 
 app.post('/api/auth/login', async (req, res) => {
@@ -48,7 +49,6 @@ app.get('/api/users', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// GET TICKETS (Termasuk logs & comments)
 app.get('/api/tickets', async (req, res) => {
   try {
     const query = `
@@ -91,7 +91,6 @@ app.put('/api/tickets/:id/status', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ENDPOINT BARU: TAMBAH KOMENTAR
 app.post('/api/tickets/:id/comments', async (req, res) => {
   const { id } = req.params;
   const { user_name, text } = req.body;
@@ -110,19 +109,8 @@ app.post('/api/tickets/:id/comments', async (req, res) => {
     let logs = [];
     try { logs = JSON.parse(ticketRes.rows[0].logs || '[]'); } catch(e) {}
 
-    const newComment = {
-      user: user_name,
-      text: text.trim(),
-      time: new Date().toISOString()
-    };
-    comments.push(newComment);
-
-    // Otomatis catat di Activity Log bahwa ada komentar baru
-    logs.push({
-      user: user_name,
-      action: 'Menambahkan komentar',
-      time: new Date().toISOString()
-    });
+    comments.push({ user: user_name, text: text.trim(), time: new Date().toISOString() });
+    logs.push({ user: user_name, action: 'Menambahkan komentar', time: new Date().toISOString() });
 
     await pool.query(
       'UPDATE tickets SET comments = $1, logs = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3',

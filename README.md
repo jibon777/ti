@@ -67,3 +67,8 @@ docker compose down -v
 # Rebuild dan jalankan ulang
 docker compose up --build
 📝 LisensiProject ini dibuat untuk kebutuhan internal dan pengembangan portofolio.
+
+
+masih dalam tahap pengembangan
+
+test lagi
